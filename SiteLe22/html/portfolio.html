@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Novidades</title>
+    <link rel="stylesheet" href="../css/estilo.css">
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo1">
+                <h1>Vitor</h1> 
+            </div>
+            <div class="logo2">
+                <h1>Para LEIGOS</h1>
+            </div>
+        </div> 
+
+        <div class="menu">
+            <a href="index.html">Home</a>
+            <a href="portfolio.html">Portfólio</a>
+            <a href="novidades.html">Novidades</a>
+            <a href="sobre.html">Quem Sou</a>
+            <a id="botao" href="contato.html">Contato</a>
+    </nav>
+
+    <section class="novidades-section">
+        <h3>MEU PORTFÓLIO</h3>
+        <p>Aqui compartilho experiências, aprendizados e projetos recentes.</p>
+
+        <div class="comentario">
+
+            <div class="novidade-card">
+                <h4>SE Identificador de Escorpião em Python</h4>
+            <pre class="codigo-colapsado">
+#!/usr/bin/env python3<br>
+"""<br>
+detector_escorpioes_yesno_manual.py<br>
+<br>
+Sistema Especialista interativo (terminal) — identifica qual dos 4 Tityus é mais provável<br>
+com base em perguntas SIM/NÃO observacionais (cor, região, local de encontro, padrões, tamanho).<br>
+<br>
+Não tenta abrir nem processar imagens — todas as respostas vêm do usuário.<br>
+<br>
+Espécies consideradas:<br>
+ - Tityus serrulatus - Escorpião Amarelo<br>
+ - Tityus bahiensis - Escorpião Marrom<br>
+ - Tityus stigmurus - Escorpião Amarelo do Nordeste<br>
+ - Tityus obscurus - Escorpião Preto da Amazônia<br>
+<br>
+Aviso: protótipo educacional — não substitui identificação por especialista.<br>
+"""<br>
+<br>
+from typing import Dict, List, Tuple<br>
+<br>
+def ask_yesno(prompt: str) -> bool:<br>
+    """Pergunta simples sim/não; aceita 's','sim','n','não' (ou variações em inglês)."""<br>
+    while True:<br>
+        resp = input(prompt + " (s/n): ").strip().lower()<br>
+        if resp in ("s", "sim", "y", "yes"):<br>
+            return True<br>
+        if resp in ("n", "nao", "não", "no"):<br>
+            return False<br>
+        print("Resposta inválida — digite 's' para sim ou 'n' para não.")<br>
+<br>
+def score_from_answers(answers: Dict[str, bool]) -> List[Tuple[str, int, List[str]]]:<br>
+    """<br>
+    Recebe respostas booleanas e retorna lista de (espécie, pontuação, motivos).<br>
+    Regras heurísticas baseadas em: cor, região, ambiente, padrão e tamanho.<br>
+    """<br>
+    species = {<br>
+        "Tityus serrulatus - Escorpião Amarelo": {"score": 0, "matches": []},<br>
+        "Tityus bahiensis - Escorpião Marrom": {"score": 0, "matches": []},<br>
+        "Tityus stigmurus - Escorpião Amarelo do Nordeste": {"score": 0, "matches": []},<br>
+        "Tityus obscurus - Escorpião Preto da Amazônia": {"score": 0, "matches": []},<br>
+    }<br>
+<br>
+    # Regras (heurísticas)<br>
+    if answers.get("cor_amarela"):<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["score"] += 30<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["matches"].append("cor amarela/clarinha")<br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["score"] += 20<br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["matches"].append("cor amarela/clarinha")<br>
+<br>
+    if answers.get("cor_marrom"):<br>
+        species["Tityus bahiensis - Escorpião Marrom"]["score"] += 35<br>
+        species["Tityus bahiensis - Escorpião Marrom"]["matches"].append("cor marrom/castanho")<br>
+<br>
+    if answers.get("cor_escura"):<br>
+        species["Tityus obscurus - Escorpião Preto da Amazônia"]["score"] += 40<br>
+        species["Tityus obscurus - Escorpião Preto da Amazônia"]["matches"].append("cor escura/preta")<br>
+<br>
+    if answers.get("regiao_norte"):<br>
+        species["Tityus obscurus - Escorpião Preto da Amazônia"]["score"] += 35<br>
+        species["Tityus obscurus - Escorpião Preto da Amazônia"]["matches"].append("região Norte/Amazônia")<br>
+<br>
+    if answers.get("regiao_nordeste"):<br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["score"] += 35<br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["matches"].append("região Nordeste")<br>
+<br>
+    if answers.get("regiao_sudeste_centro_sul"):<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["score"] += 25<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["matches"].append("comum em Sudeste/Centro-Oeste/Sul")<br>
+        species["Tityus bahiensis - Escorpião Marrom"]["score"] += 20<br>
+        species["Tityus bahiensis - Escorpião Marrom"]["matches"].append("ocorre em Sudeste/Sul")<br>
+<br>
+    if answers.get("encontrado_dentro_casa"):<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["score"] += 30<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["matches"].append("encontrado dentro de casa / ambiente urbano")<br>
+<br>
+    if answers.get("encontrado_quintal_entulho"):<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["score"] += 15<br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["matches"].append("associado a quintal/entulho (ambiente sinantrópico)")<br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["score"] += 10<br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["matches"].append("ocorre em áreas urbanas do Nordeste")<br>
+<br>
+    if answers.get("encontrado_mata_rochas"): <br>
+        species["Tityus bahiensis - Escorpião Marrom"]["score"] += 20 <br>
+        species["Tityus bahiensis - Escorpião Marrom"]["matches"].append("associado a mata/rochas/ambiente rural") <br>
+        species["Tityus obscurus - Escorpião Preto da Amazônia"]["score"] += 15 <br>
+        species["Tityus obscurus - Escorpião Preto da Amazônia"]["matches"].append("associado a ambientes naturais (Amazônia possivelmente)") <br>
+<br>
+    if answers.get("tem_faixas_manchas"): <br>
+        species["Tityus bahiensis - Escorpião Marrom"]["score"] += 15 <br>
+        species["Tityus bahiensis - Escorpião Marrom"]["matches"].append("padrões/faixas observadas (compatível com T. bahiensis em alguns casos)") <br>
+<br>
+    if answers.get("tamanho_pequeno"): <br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["score"] += 5 <br>
+        species["Tityus stigmurus - Escorpião Amarelo do Nordeste"]["score"] += 5 <br>
+<br>
+    if answers.get("tamanho_grande"): <br>
+        species["Tityus bahiensis - Escorpião Marrom"]["score"] += 10 <br>
+        species["Tityus bahiensis - Escorpião Marrom"]["matches"].append("tamanho relativamente grande") <br>
+<br>
+    if answers.get("encontrado_dentro_casa") and answers.get("cor_amarela"): <br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["score"] += 10 <br>
+        species["Tityus serrulatus - Escorpião Amarelo"]["matches"].append("combinação cor amarela + ambiente doméstico") <br>
+<br>
+    results = [] <br>
+    for sp, info in species.items(): <br>
+        results.append((sp, info["score"], info["matches"])) <br>
+    results.sort(key=lambda x: x[1], reverse=True) <br>
+    return results <br>
+<br>
+def main(): <br>
+    print("=== Detector de Escorpiões (sim/não) — manual (sem leitura de imagem) ===") <br>
+    print("Responda às perguntas com base na observação (por exemplo, olhando a sua imagem).") <br>
+    print() <br>
+<br>
+    answers = {} <br>
+    # Região <br>
+    answers["regiao_norte"] = ask_yesno("O encontro ocorreu na região Norte / Amazônia?") <br>
+    answers["regiao_nordeste"] = ask_yesno("O encontro ocorreu no Nordeste?") <br>
+    answers["regiao_sudeste_centro_sul"] = ask_yesno("O encontro ocorreu no Sudeste, Centro-Oeste ou Sul?") <br>
+<br>
+    # Cor <br>
+    print("\nSobre a cor do animal (baseado na observação/imagem):") <br>
+    answers["cor_amarela"] = ask_yesno("O escorpião era amarelado / claro?") <br>
+    answers["cor_marrom"] = ask_yesno("O escorpião era marrom / castanho?") <br>
+    answers["cor_escura"] = ask_yesno("O escorpião era bem escuro / preto?") <br>
+<br>
+    # Local <br>
+    print("\nLocal onde foi encontrado:") <br>
+    answers["encontrado_dentro_casa"] = ask_yesno("Foi encontrado dentro de casa (parede, sapato, quarto etc.)?") <br>
+    answers["encontrado_quintal_entulho"] = ask_yesno("Foi encontrado em quintal/entulho/próximo a construções?") <br>
+    answers["encontrado_mata_rochas"] = ask_yesno("Foi encontrado em mata/rochas/área natural (não urbana)?") <br>
+<br>
+    # Padrões e tamanho <br>
+    print("\nPadrões e tamanho:") <br>
+    answers["tem_faixas_manchas"] = ask_yesno("Você notou faixas, listras ou manchas no dorso do escorpião?") <br>
+    answers["tamanho_pequeno"] = ask_yesno("O animal parecia pequeno (≈ <= 3 cm)?") <br>
+    answers["tamanho_grande"] = ask_yesno("O animal parecia relativamente grande (> 6 cm)?") <br>
+<br>
+    # Calcula pontuações <br>
+    results = score_from_answers(answers) <br>
+<br>
+    # Mostra resultados ordenados <br>
+    print("\n--- Resultado (candidatos ordenados) ---") <br>
+    for sp, score, reasons in results: <br>
+        print(f"\n{sp} — pontuação: {score}") <br>
+        if reasons: <br>
+            for r in reasons: <br>
+                print(f"  - {r}")<br>
+        else: <br>
+            print("  - Sem características fortes observadas para esta espécie.")<br>
+<br>
+    # Sugestão final (top1 e possivel top2)<br>
+    top1 = results[0]<br>
+    top2 = results[1]<br>
+    print("\nSugestão final:")<br>
+    print(f"  1) {top1[0]} (segundo as informações dadas, esta pontuação {top1[1]}, nos leva a crer que esta era a espécie de escorpião)")<br>
+    if top1[1] - top2[1] <= 15:<br>
+        print(f"  2) {top2[0]} (pontuação {top2[1]}) — alternativa próxima")<br>
+<br>
+    print("\nObservações:")<br>
+    print("- O sistema desconsidera sintomas pós-picada.")<br>
+    print("- Identificação por imagem pode ser imprecisa; fotografe o animal e procure especialistas se necessário.")<br>
+    print("\nÉ aconselhado, logo após o acidente: <br> \n-Lavar a região com água corrente e sabão <br> \n-Aplicar compressa de água morna no local <br> \n-Não fazer torniquete para impedir ciculação do sangue (RISCO DE NECROSE) <br> \n-Não tentar sugar o veneno da ferida (RISCO DE ENVENENAMENTO) <br> \n-Ir o mais rápido possivel para a emergência com a suspeita de qual espécie era!")<br>
+<br>    
+<br>
+<br>
+if __name__ == "__main__": <br>
+    main() <br>
+            </pre>
+            </div>
+           
+            <div class="novidade-card">
+                <h4>Calculadora de IMC em JAVA</h4>
+            <pre class="codigo-colapsado">
+import java.util.Scanner;
+
+public class Main { <br>
+<br>
+    public static void divisao() { <br>
+        System.out.println("\n=================================================================\n"); <br>
+    }<br>
+<br>
+    public static int lerInteiro(Scanner sc, String mensagem) {<br>
+    while (true) {<br>
+        System.out.print(mensagem);<br>
+        if (sc.hasNextInt()) {<br>
+            int valor = sc.nextInt();<br>
+            sc.nextLine();<br>
+            return valor;<br>
+        } else {<br>
+            System.out.println("Entrada inválida! Digite apenas números.");<br>
+            divisao();<br>
+            sc.nextLine();<br>
+        }<br>
+    }<br>
+}
+    
+    public static float lerFlutuante(Scanner sc, String mensagem) {<br>
+    while (true) {<br>
+        System.out.print(mensagem);<br>
+        if (sc.hasNextFloat()) {<br>
+            float valor = sc.nextFloat();<br>
+            sc.nextLine();<br>
+            return valor;<br>
+        } else {<br>
+            System.out.println("entrada inválida! Digite apenas números.");<br>
+            divisao();<br>
+            sc.nextLine();<br>
+        }<br>
+    }<br>
+}<br>
+    public static void main(String[] args) {<br>
+<br>
+        Scanner leitor = new Scanner(System.in);<br>
+        <br>
+        boolean restart = false;<br>
+        boolean continuar = true;<br>
+<br>
+while (continuar) {<br>
+<br>
+    divisao();<br>
+    System.out.println("Bem-vindo ao sistema de cálculo de IMC!\n");<br>
+    System.out.print("Qual é o seu Nome? ");<br>
+        String nome = leitor.nextLine();<br>
+            if (nome.isEmpty()) {<br>
+                System.out.println("Nome não pode estar em branco!");<br>
+                continue;<br>
+            }<br>
+            else if (nome.matches(".*\\d.*")) {<br>
+                System.out.println("Nome não deve conter números!");<br>
+                continue;<br>
+            }<br>
+            <br>
+    int idade = lerInteiro(leitor, "Qual é a sua Idade? ");<br>
+<br>
+                if (idade <= 0) {<br>
+                    System.out.println("Idade não pode ser 0 / negativa!");<br>
+                    continue;<br>
+                }<br>
+                else if (idade < 10) {<br>
+                    System.out.println("Idade incompatível com o sistema! Indicamos buscar um médico para uma leitura mais precisa.");<br>
+                    divisao();<br>
+                    return;<br>
+                }<br>
+                else if (idade > 122) {<br>
+                    System.out.println("Idade inválida! A pessoa mais velha do mundo viveu 122 anos.");<br>
+                    continue;<br>
+                }<br>
+                else if (idade > 100) {<br>
+                    System.out.println("Por ter uma idade avançada indicamos buscar um médico para uma leitura mais precisa.");<br>
+                    divisao();<br>
+                    return;<br>
+                }<br>
+<br>
+    float altura = lerFlutuante(leitor, "Qual é a sua Altura? (em caso de erro, use '.' no lugar da vírgula) ");<br> 
+
+            if (altura <= 0) {<br>
+                System.out.println("Altura não pode ser 0 / negativa!");<br>
+                continue; <br>
+            }
+            else if (idade >= 10 && altura < 1.25) {<br>
+<br>                        
+boolean caso = true;<br>
+while(caso) {<br>  
+        int resposta = lerInteiro(leitor, "Você possui Nanismo? \n\n 1 - Sim \n 2 - Não \n\n Resposta: ");<br>
+<br>
+            if (resposta != 1 && resposta != 2) {<br>
+                    System.out.println("Erro! Digite '1' para 'sim' e '2' para 'não'.");<br>
+                        divisao();<br>
+                        continue;<br>
+            }<br>
+                            <br>
+switch (resposta) {<br>
+            case 1:<br>
+                System.out.println("Tudo bem! Indicamos buscar um médico para uma leitura mais precisa.");
+                        divisao();<br>
+                        caso = false;<br>
+                        return;<br>
+            case 2:<br>
+                System.out.println("Altura incompatível com a idade!");<br>
+                        caso = false;<br>
+                        restart = true;<br>
+                        break;<br>
+}<br>
+}<br>
+        if (restart == true) {<br>
+            restart = false;<br>
+            continue;<br>
+        }   <br>      
+        }<br>
+        else if (altura > 2.2) {<br>
+            System.out.println("Por você ter essa altura indicamos buscar<br> um médico para uma leitura mais precisa.");<br>
+            divisao();<br>
+            break;<br>
+        }<br>
+        <br>
+float peso = lerFlutuante(leitor, "Qual é o seu peso? (em caso de erro, use '.' no lugar da vírgula) ");<br>
+<br>
+        if (peso <= 0) {<br>
+            System.out.println("Peso não pode ser 0 / negativo!");<br>
+            continue;<br>
+        }<br>
+        else if (peso > 600) {<br>
+            System.out.println("O maior peso já registrado foi de 600kg.<br> Procure um médico para uma leitura mais precisa.");<br>
+            divisao();<br>
+            return;<br>
+        }<br>
+        else if (peso < 23 && idade >= 10) {<br>
+            System.out.println("Peso incompatível com a idade!");<br>
+            continue;<br>
+        }<br>
+    <br>
+boolean continuar2 = true;<br>
+while(continuar2) {<br>
+<br>
+int resposta2 = lerInteiro(leitor, "Olá! Seu nome é " + nome + ", você tem " + idade + " anos,<br> sua altura é " + altura + "m e seu peso é " + peso + "kg. Certo? \n\n 1 - Sim \n 2 - Não \n\n Resposta:");<br>
+        if (resposta2 != 1 && resposta2 != 2) {<br>
+            System.out.println("Erro! Digite '1' para 'sim' e '2' para 'não'.");<br>
+            divisao();<br>
+        }<br>
+switch (resposta2) {<br>
+        case 1:<br>
+            System.out.println("\nObrigado pelas informações! Vamos calcular o seu IMC.");<br>
+            divisao();<br>
+            continuar2 = false;<br>
+            break;<br>
+        case 2:<br>
+            System.out.println("Vamos reiniciar o processo.");<br>
+            continuar2 = false;<br>
+            restart = true;<br> 
+            break;<br>
+}<br>
+}<br>
+        if (restart == true) {<br>
+            restart = false;<br>
+            continue;<br>
+        }<br>
+        <br>
+float calcIMC = peso/(altura*altura); <br>
+<br>
+        if (calcIMC < 18.5) {<br>
+            System.out.printf("Seu IMC é %.1f, você está abaixo do peso ideal.<br> Indicamos buscar um nutricionista.", calcIMC);<br>
+        }<br>
+        else if (calcIMC >= 18.5 && calcIMC < 24.9) {<br>
+            System.out.printf("Seu IMC é %.1f, você está com o peso ideal.<br> Mantenha uma alimentação saudável e pratique exercícios regularmente!", calcIMC);<br>
+        }<br>
+        else if (calcIMC >= 25 && calcIMC < 29.9) {<br>
+            System.out.printf("Seu IMC é %.1f, você está com sobrepeso.<br> Indicamos buscar um nutricionista.", calcIMC);<br>
+        }<br>
+        else if (calcIMC >= 30 && calcIMC < 34.9) {<br>
+            System.out.printf("Seu IMC é %.1f, você está com Obesidade Grau I.<br> Indicamos buscar um nutricionista e um educador físico.", calcIMC);<br>
+        }<br>
+        else if (calcIMC >= 35 && calcIMC < 39.9) {<br>
+            System.out.printf("Seu IMC é %.1f, você está com Obesidade Grau II.<br> Indicamos buscar um médico, um nutricionista e um educador físico.", calcIMC);<br>
+        }<br>
+        else if (calcIMC >= 40) {<br>
+            System.out.printf("Seu IMC é %.1f, você está com Obesidade Grau III.<br> Indicamos buscar um médico, um nutricionista e um educador físico.", calcIMC);<br>
+        }<br>
+<br>
+boolean caso2 = true;<br>
+while(caso2) {<br>
+divisao();<br>
+int resposta3 = lerInteiro(leitor, "Deseja fazer outro IMC? \n\n 1 - Sim \n 2 - Não \n\n Resposta: ");<br>
+
+        if (resposta3 != 1 && resposta3 != 2) {<br>
+            System.out.println("Erro! Digite '1' para 'sim' e '2' para 'não'.");<br>
+            divisao();<br>
+            continue;<br>
+        }<br>
+                <br>
+switch (resposta3) {<br>
+            case 1:<br>
+                caso2 = false;<br>
+                continuar = true;<br>
+                break;<br>
+            case 2:<br>
+                caso2 = false;<br>
+                continuar = false;<br>
+                System.out.println("\nObrigado por usar o nosso sistema!");<br>
+                divisao();<br>
+                break;<br>
+}<br>
+}<br>
+}<br>
+leitor.close();<br>
+return;<br>
+}<br>
+}
+ </pre>
+  </div>
+
+            <div class="novidade-card">
+                <h4>Calculadora em C</h4>
+            <pre class="codigo-colapsado">
+#include stdio.h                            //biblioteca para entrada e saída de dados<br>
+#include string.h                           //biblioteca para manipulação de strings<br>
+#include math.h                             //biblioteca para funções matemáticas<br>
+#include locale.h                           //biblioteca para manipulação de strings<br>
+<br>
+float soma (float v1, float v2)             //função de números reais para realizar a soma <br>
+{<br>
+    float resp;                             //declaração da variável<br>
+     resp = v1 + v2;                        //realiza a soma e determina resp<br>
+     return resp;                           //retorna o resultado da soma<br>
+}<br>
+<br>
+float subtr(float v1, float v2)             //função de números reais para realizar a subtração<br>
+{<br>
+    float resp;                             //declaração da variável<br>
+     resp = v1 - v2;                        //realiza a subtração e determina resp<br>
+     return resp;                           //retorna o resultado da subtração<br>
+}<br>
+<br>
+float mult (float v1, float v2)             //função de números reais para realizar a multiplicação<br>
+{<br>
+    float resp;                             //declaração da variável<br>
+     resp = v1 * v2;                        //realiza a multiplicação e determina resp<br>
+     return resp;                           //retorna o resultado da multiplicação<br>
+}<br>
+<br>
+float divs (float v1, float v2)             //função de números reais para realizar a divisão<br>
+{<br>
+    float resp;                                              //declaração da variável<br>
+    if (v2 == 0) {                                           //caso o divisor seja 0<br>
+        printf("Erro! Não é possível dividir por 0!");       //mensagem de erro<br>
+        return 0;                                            //retorna 0 e imprime mensagem de erro<br>
+    }<br>
+    else {                              //caso o divisor seja diferente de 0<br>
+    resp = v1 / v2;                     //realiza a divisão e determina resp<br>
+     return resp;                       //retorna o resultado da divisão<br>
+    }<br>
+}<br>
+<br>
+float pot (float v1, float v2)         //função de números reais para realizar a potenciação<br>
+{<br>
+    float resp;                        //declaração da variável<br>
+     resp = pow(v1, v2);             <br>  //função pow da biblioteca math.h para calcular a potenciação e determina resp<br>
+     return resp;                      //retorna o resultado da potenciação<br>
+}  <br>   
+<br>
+int main(void)                                  //função principal<br>
+{<br>
+    setlocale(LC_ALL, "Portuguese");            //define o idioma para português<br>
+<br>
+float f1, f2, res;                //declaração das variáveis<br>
+char resp1[20];                   //declaração das variáveis<br>
+char resp2[10];                   //declaração das variáveis<br>
+char resp3[10];                   //declaração das variáveis<br>
+int continuar = 1;                //declaração das variáveis<br>
+int verificar = 1;                //declaração das variáveis<br>
+int finalizar = 1;                //declaração das variáveis<br>
+<br>
+    printf("\n=================================================================\n");<br>
+    printf("Olá, seja bem-vindo à Calculadora!\n");   //apresentação da calculadora <br>                              
+    <br>
+    while (continuar) {      //início do loop while(continuar)<br>
+<br>
+        printf("\n\n\n");                                       <br>                //espaço entre as linhas <br>
+        printf("Qual operação você gostaria de efetuar? (+, -, *, /, ^ )\n "); <br> //escolha da operação a ser realizada<br>
+        printf("Ou você gostaria de finalizar a calculadora? (sair)\n ");  <br>     //ou escolha para finalizar a calculadora<br>
+        scanf("%s", resp1);
+<br>
+    if (strcasecmp(resp1, "adição") == 0 || strcmp(resp1, "+") == 0 <br>|| strcasecmp(resp1, "soma") == 0) { <br>
+        //caso o usuário escolha soma/adição<br>
+        <br>
+        printf("\n=================================================================");  <br>       //divisória<br>
+        printf("\nVocê selecionou 'soma'/'adição'/'+' certo? ");         <br>  //confirmação da escolha feita pelo usuário<br>
+        scanf("%s", resp2);                                              <br>  //leia a resposta do usuário resp2<br>
+        <br>
+        if (strcasecmp(resp2, "certo") == 0 || strcasecmp(resp2, "s") == 0 <br>|| strcasecmp(resp2, "sim") == 0) {  //caso a resposta do usuário seja sim<br>
+            <br>
+            while(verificar) {                                          <br>   //loop para verificar se a entrada é um número real <br>
+            <br>
+            printf("\nQuais números você gostaria de somar?\n ");        <br>  //escolha dos fatores para realizar o cálculo<br>
+            <br>
+            if (scanf("%f %f", &f1, &f2) != 2) {                         <br>  //caso a entrada não seja um número real<br>
+            <br>    
+                printf("Erro! você digitou algo que não é número!\n");  <br>   //mensagem de erro<br>
+                while (getchar() != '\n');                              <br>   //limpa o que sobrou na entrada <br>
+                printf("\n=================================================================");<br> //divisória<br>
+                continue;                                              <br>    //voltar para o início do loop while(verificar)<br>
+            }<br>
+            else {                                                     <br>    //caso a entrada seja um número real <br>
+               <br>
+                res = soma(f1, f2);                                    <br>    //chama a função soma para realizar a soma e determina res  <br>   
+                printf("\nSoma: %.3f + %.3f = %.3f ", f1, f2, res);   <br>     //saída do resultado da soma<br>
+                printf("\n=================================================================");<br> //divisória<br>
+                break;                                                  <br>   //sai do loop while(verificar) se a entrada for válida<br>
+            }<br>
+        }<br>
+    }<br>
+        else continue;                                             <br>        //voltar para o início do loop while(continuar)<br>
+    }<br>
+<br>
+    else if (strcasecmp(resp1, "subtração") == 0 || strcmp(resp1, "-") == 0) {                     <br>             //caso o usuário escolha subtração<br>
+<br>
+        printf("\n=================================================================");    <br>     //divisória<br>
+        printf("\nVocê selecionou 'subtração'/'-' certo? ");             <br>  //confirmação da escolha feita pelo usuário<br>
+        scanf("%s", resp2);                                             <br>   //leitura da resposta do usuário resp2<br>
+        <br>
+        if (strcasecmp(resp2, "certo") == 0 || strcasecmp(resp2, "s") == 0<br> || strcasecmp(resp2, "sim") == 0) {  //caso a resposta do usuário seja sim<br>
+<br>
+            while(verificar) {                                          <br>   //loop para verificar se a entrada é um número real<br>
+<br>
+            printf("\nQuais números você gostaria de subtrair?\n ");     <br>  //escolha dos fatores para realizar o cálculo<br>
+         <br>   
+            if (scanf("%f %f", &f1, &f2) != 2) {                         <br>  //caso a entrada não seja um número real<br>
+            <br>    
+                printf("Erro! você digitou algo que não é número!\n");    <br> //mensagem de erro<br>
+                while (getchar() != '\n');                                <br> //limpa o que sobrou na entrada <br>
+                printf("\n================================================================="); //divisória<br>
+                continue;                                                 <br> //voltar para o início do loop while(verificar)<br>
+            }<br>
+            else {
+        <br>
+                res = subtr(f1, f2);                                      <br> //chama a função subtr para realizar a subtração e determina res<br>
+                printf("\nSubtração: %.3f - %.3f = %.3f ", f1, f2, res);   <br>//saída do resultado da subtração<br>
+                printf("\n=================================================================");<br> //divisória<br>
+                break;      //sai do loop while(verificar) se a entrada for válida<br>
+            } <br>
+        }<br>
+    }   <br>
+        else continue;             //voltar para o início do loop while(continuar)<br>
+    }<br>
+<br>
+    else if (strcasecmp(resp1, "multiplicação") == 0 || strcmp(resp1, "*") == 0) {      <br>                            //caso o usuário escolha multiplicação<br>
+<br>
+        printf("\n=================================================================");     <br>    //divisória<br>
+        printf("\nVocê selecionou 'multiplicação'/'*' certo? ");     <br>      //confirmação da escolha feita pelo usuário<br>
+        scanf("%s", resp2);                                            <br>    //leitura da resposta do usuário resp2<br>
+        <br>
+        if (strcasecmp(resp2, "certo") == 0 || strcasecmp(resp2, "s") == 0 <br>|| strcasecmp(resp2, "sim") == 0) {      //caso a resposta do usuário seja sim<br>
+<br>
+            while(verificar) {                                           <br>  //loop para verificar se a entrada é válida<br>
+<br>
+            printf("\nQuais números você gostaria de multiplicar?\n ");   <br> //escolha dos fatores para realizar o cálculo<br>
+        <br>    
+            if (scanf("%f %f", &f1, &f2) != 2) {                         <br>  //Caso a entrada não seja um número real<br>
+        <br>        
+                printf("Erro! você digitou algo que não é número!\n");   <br>  //mensagem de erro<br>
+                while (getchar() != '\n');                               <br>  //limpa o que sobrou na entrada <br>
+                printf("\n=================================================================");<br> //divisória<br>
+                continue;    //voltar para o início do loop while(verificar)<br>
+            }<br>
+            else {              //caso a entrada seja um número real<br>
+                res = mult(f1, f2);                <br> //chama a função mult para realizar a multiplicação e determina res<br>
+                printf("\nMultiplicação: %.3f * %.3f = %.3f ", f1, f2, res);<br>//saída do resultado da multiplicação<br>
+                printf("\n================================================================="); <br>//divisória<br>
+                break;  //sai do loop while(verificar) se a entrada for válida<br>
+        }<br>
+    }<br>
+    }<br>
+        else continue;          //voltar para o início do loop while<br>
+    } <br>
+<br>
+    else if (strcasecmp(resp1, "divisão") == 0 || strcmp(resp1, "/") == 0) { <br>  //caso o usuário escolha divisão<br>
+<br>
+        printf("\n=================================================================");  <br>       //divisória<br>
+        printf("\nVocê selecionou 'divisão' / '/' certo? ");        <br>       //confirmação da escolha feita pelo usuário<br>
+        scanf("%s", resp2);                                          <br>      //leitura da resposta do usuário resp2<br>
+        <br>
+        if (strcasecmp(resp2, "certo") == 0 || strcasecmp(resp2, "s") == 0 <br>|| strcasecmp(resp2, "sim") == 0) {      //caso a resposta do usuário seja sim<br>
+         <br>   
+            while(verificar) {                                         <br>    //loop para verificar se a entrada é válida<br>
+<br>
+            printf("\nQuais números você gostaria de dividir?\n ");     <br>   //escolha dos fatores para realizar o cálculo<br>
+         <br>   
+            if (scanf("%f %f", &f1, &f2) != 2) {                      <br>     //Caso a entrada não seja um número real<br>
+         <br>       
+                printf("Erro! você digitou algo que não é número!\n"); <br>    //mensagem de erro<br>
+                while (getchar() != '\n');                           <br>      //limpa o que sobrou na entrada <br>
+                printf("\n================================================================="); <br>//divisória<br>
+                continue;                                            <br>      //voltar para o início do loop while(verificar)<br>
+            }<br>
+            else {     //caso a entrada seja um número real<br>
+<br>
+                res = divs(f1, f2);                                       <br> //chama a função divs para realizar a divisão e determina res<br>
+                printf("\nDivisão: %.3f / %.3f = %.3f ", f1, f2, res);   <br>  //saída do resultado da divisão <br>
+                printf("\n================================================================="); <br>//divisória<br>
+                break;      //sai do loop while(verificar) se a entrada for válida<br>
+            }<br>
+        }<br>
+    }<br>
+        else continue;   //voltar para o início do loop while(continuar)<br>
+    }<br>
+<br>
+    else if (strcasecmp(resp1, "potenciação") == 0 || strcmp(resp1, "^") == 0 <br>|| strcasecmp(resp1, "potência") == 0) {  //caso o usuário escolha potenciação/potência<br>
+<br>
+        printf("\n=================================================================");   <br>      //divisória<br>
+        printf("\nVocê selecionou 'potenciação'/'^' certo? ");         <br>    //confirmação da escolha feita pelo usuário   <br>       
+        scanf("%s", resp2);   //leitura da resposta do usuário resp2<br>
+        <br>
+        if (strcasecmp(resp2, "certo") == 0 || strcasecmp(resp2, "s") == 0 <br>|| strcasecmp(resp2, "sim") == 0) {      //caso a resposta do usuário seja sim<br>
+<br>
+            while(verificar) {   //loop para verificar se a entrada é válida<br>
+         <br>   
+            printf("\nDigite primeiro a base e depois o exponte: \n ");   <br> //escolha dos fatores para realizar o cálculo<br>
+         <br>   
+            if (scanf("%f %f", &f1, &f2) != 2) { <br>//Caso a entrada não seja um número real<br>
+         <br>       
+                printf("Erro! você digitou algo que não é número!\n");    <br> //mensagem de erro<br>
+                while (getchar() != '\n');                             <br>    //limpa o que sobrou na entrada <br>
+                printf("\n================================================================="); <br>//divisória<br>
+                continue;                                             <br>     //voltar para o início do loop while(verificar)<br>
+            }<br>
+            else {       //caso a entrada seja um número real<br>
+<br>
+                res = pot(f1, f2);                                       <br>  //chama a função pot para realizar a potenciação e determina res<br>
+                printf("\nPotencição: %.3f ^ %.3f = %.3f ", f1, f2, res);<br>  //saída do resultado da potenciação<br>
+                printf("\n=================================================================");<br> //divisória<br>
+                break;  //sai do loop while(verificar) se a entrada for válida<br>
+            }<br>
+        }<br>
+    }<br>
+        else continue;    //voltar para o início do loop while(continuar)<br>
+    }<br>
+<br>
+    else if (strcasecmp(resp1, "sair") == 0 || strcasecmp(resp1, "finalizar") == 0) {    <br>                           //caso o usuário escolha sair/finalizar<br>
+<br>
+        printf("\n=================================================================");    <br>     //divisória<br>
+        printf("\nVocê selecionou 'sair'/'finalizar' certo? ");       <br>     //confirmação da escolha feita pelo usuário<br>
+        scanf("%s", resp2);                                          <br>      //leitura da resposta do usuário resp2<br>
+<br>
+        if (strcasecmp(resp2, "certo") == 0 || strcasecmp(resp2, "s") == 0 <br>|| strcasecmp(resp2, "sim") == 0) {      //caso a resposta do usuário seja sim<br>
+            
+            printf("\nObrigado por usar a calculadora! Até logo!");     <br>   //mensagem de despedida e finalização do algoritmo<br>
+            printf("\n================================================================="); <br>    //divisória<br>
+            continuar = 0;   //fim do while e do algoritmo<br>
+            return 0;       <br>
+        }<br>
+        else continue;    //voltar para o início do loop while(continuar)<br>
+    }<br>
+<br>
+    else { printf("\nResposta inválida! Tente novamente.");     <br>    //caso o usuário digite algo diferente do esperado<br>
+           printf("\n================================================================="); <br>     //divisória<br>
+           printf("\nApenas o seguintes termos são aceitos: +, -, *, /, ^");            <br>//apenas os termos aceitos<br>
+           printf("\nApenas o seguintes termos são aceitos: adição, soma, subtração, multiplicação, divisão, potenciação, potência");  <br>       //apenas os termos aceitos<br>
+           printf("\n=================================================================");  <br>    //divisória<br>
+                continue;        //voltar para o início do loop while<br>
+    }<br>
+    <br>
+    while(finalizar) {  //loop para verificar se o usuário deseja continuar ou não<br>
+<br>
+    printf("\n\n\n");
+    printf("Você gostaria de fazer outra operação? \n");       <br>            //pergunta se o usuário deseja continuar<br>
+    scanf("%s", resp3);     //leitura da resposta do usuário resp3<br>
+<br>
+    if (strcasecmp(resp3, "não") == 0 || strcasecmp(resp3, "n") == 0 <br>|| strcasecmp(resp3, "nao") == 0) {            //caso a resposta do usuário seja não<br>
+<br>
+        printf("\nObrigado por usar a calculadora! Até logo!");       <br>     //mensagem de despedida e finalização do algoritmo<br>
+        printf("\n=================================================================");<br>   //divisória<br>
+        finalizar = 0;   //fim do loop while(finalizar)    <br>
+        continuar = 0;   //fim do loop while(continuar) e fim do algoritmo  <br>     
+    }<br>
+<br>
+    else if (strcasecmp(resp3, "sim") == 0 || strcasecmp(resp3, "s") == 0 <br>|| strcasecmp(resp3, "ss") == 0) {        //caso a resposta do usuário seja sim<br>
+        <br>
+        printf("\nCerto! Vamos Lá! ");                                   <br>  //mensagem para voltar para o início do loop while(continuar)<br>
+        printf("\n=================================================================");    <br>     //divisória <br>  
+        break; <br>//sai do loop while(finalizar) e retorna para o início do loop while(continuar)<br>
+    }<br>
+<br>
+    else {<br>
+       <br>
+        printf("\nResposta inválida! Tente novamente."); <br>  //caso a resposta do usuário seja diferente de sim ou não<br>
+        printf("\n=================================================================");    <br>     //divisória<br>
+        continue; <br> //voltar para o início do loop while(finalizar)<br>
+        }<br>
+    } <br>
+    }<br>
+return 0;<br>
+}  
+</pre>  
+            </div>
+            <div class="novidade-card">
+                <h4>Média de Turma em C</h4>
+            <pre class="codigo-colapsado">
+#include <stdio.h>        // Para printf e scanf <br>
+#include <math.h>         // Para cálculos<br>
+#include <string.h>       // Para strcasecmp<br>
+#include <strings.h>      // Para strcasecmp linux<br>
+#include <stdlib.h>       // Para rand e srand<br>
+#include <time.h>         // Para time()<br>
+#include <locale.h>       // Para setlocale<br>
+<br>
+void lerNotas(int n, float notas[]) {<br>
+<br>
+ int i, escolha=1;   // Variável de controle do for e do while(escolha)<br>
+ char resp[10];      // Variável para armazenar a resposta do usuário<br>
+<br>                                                               
+ while(escolha) {    // Loop while para verificar a resposta do usuário<br>
+ printf("Gostaria de usar notas aleatórias? (sim / não) ");   // Pergunta ao usuário se deseja utilizar notas aleatórias<br>
+ scanf("%s", resp);   // Lê a resposta do usuário<br>
+ printf("\n");<br>
+<br>
+    if (strcasecmp(resp, "s") == 0 || strcasecmp(resp, "sim") == 0 || strcmp(resp, "1") == 0) { <br> // Caso a resposta seja sim, ativa o gerador de notas aleatórias<br>
+<br>    
+        for (i = 0; i < n; i++) {                    // Gerador de notas aleatórias em for<br>
+            notas[i] = (float)(rand() % 101) / 10.0; // Nota aleatória entre 0.0 e 10.0<br>
+             printf("Nota do aluno %d: %.2f\n", i + 1, notas[i]);  // Exibe a nota gerada<br>
+            }<br>
+     break;                                      // Encerra o loop while(escolha)<br>
+    }<br>
+<br>
+    else if (strcasecmp(resp, "não") == 0 || strcasecmp(resp, "n") == 0 || strcasecmp(resp, "nao") == 0 || strcmp(resp, "0") == 0) {<br>    // Caso a resposta seja não, solicita as notas dos alunos ao usuário<br>
+<br>   
+        for (i=0; i < n; i++) {                          // Loop For para ler as notas<br>
+            printf("Digite a nota do aluno %d: ", i+1);  // Solicita a nota do aluno<br>
+<br>                
+                if (scanf("%f", &notas[i]) !=1 || notas[i] < 0 || notas[i] > 10) { // Armazena a nota e verifica se ela é válida<br>
+                    printf("\nNota inválida! As notas devem ser entre 0 e 10!\n\n"); // Mensagem de erro caso seja inválida<br>
+                    while (getchar() != '\n');                                       // Limpa buffer<br>
+                    i--;                                                   // Decrementa o índice para repetir a leitura da nota<br>
+                }<br>
+        }<br>
+     break;       // Encerra o loop while(escolha)<br>
+    }<br>
+<br>    
+    else {         // Caso a resposta seja inválida<br>
+        printf("Resposta inválida! Responda com: (sim/1) ou (não/0)!\n\n");   // Mensagem de erro<br>
+        while (getchar() != '\n');                                            // Limpa buffer<br>
+        continue;                                                             // Retorna ao início do loop<br>
+        }<br>    
+ }<br>
+}<br>
+<br>
+float calcularMedia(int n, float notas[]) {   // Função para calcular a média das notas de uma turma<br>
+<br>
+ float total = 0;                             // Variável para armazenar a soma de todas as notas<br>
+ int i;                                       // Variável de controle para o for<br>
+<br>
+    for (i=0; i<n; i++) {                     // Percorre todas as notas e soma os valores <br>
+        total += notas[i];<br>
+    }<br>
+    return total /= n; // Calcula a média dividindo o total pelo número de alunos e retorna o resultado<br>      
+}<br>
+<br>
+void organizarNotas(int n, float notas[]) {    // Função para ordenar as notas em ordem crescente<br>
+<br> 
+ int j, k;                                     // Variáveis de controle para o for<br>
+ float temp;                                   // Variável temporária usada para trocar valores<br>
+<br>   
+    for (j = 0; j < n; j++) {                  // Percorre todos os elementos (notas) do vetor<br>
+<br>        
+        for (k = j + 1; k < n; k++) {          // Compara cada nota com as próximas<br>
+<br>            
+            if (notas[j] > notas[k]) {  // Se a nota atual for maior que a próxima, troca as posições<br>
+                temp = notas[j];        // Guarda o valor de notas[j]<br>
+                notas[j] = notas[k];    // Coloca o valor menor em notas[j]<br>
+                notas[k] = temp;        // Coloca o valor guardado em notas[k]<br>
+            }<br>
+        }<br>
+    }<br>
+}<br> 
+<br>
+void encontrarExtremos(int n, float notas[], float *maior, float *menor) { <br> // Função para encontrar a maior e menor nota<br>
+    *maior = notas[0]; <br>  // Inicializa o maior valor com a primeira nota<br>
+    *menor = notas[0]; <br>  // Inicializa o menor valor com a primeira nota<br>
+<br>
+    for (int i = 1; i < n; i++) {    // Percorre as notas a partir do segundo elemento<br>                                                  
+        if (notas[i] > *maior) {     // Caso a nota atual seja maior que o maior valor encontrado<br>
+            *maior = notas[i];       // Atualiza a maior nota<br>
+        }<br>
+        if (notas[i] < *menor) {     // Caso a nota atual seja menor que o menor valor encontrado<br>
+            *menor = notas[i];       // Atualiza a menor nota<br>
+        }<br>
+    }<br>
+}<br>
+<br>    
+float contarAprovados(int n, float notas[], float valor) { // Função para contar quantos alunos foram aprovados<br>
+  
+    int i, aprova =0;                                      // Variável de controle do for<br>
+<br>        
+    for (i=0; i<n; i++) {                                  // Percorre todas as notas<br>
+<br>        
+        if (notas[i] >= valor) {                           // Verifica se a nota é >= ao valor da aprovação<br>
+         aprova++;                                         // Se sim, incrementa o contador que soma o número de aprovados<br>
+        }<br>
+    }<br>
+    return aprova;                                         // Retorna o número de alunos aprovados<br>
+}<br> 
+<br>    
+int main() {                                               // Função principal do programa <br>                                                                                                                        
+<br>    
+    srand(time(NULL));                                     // Inicializa o gerador de números aleatórios<br>
+<br>
+    setlocale(LC_ALL, "Portuguese");                       // Define o idioma para português<br>
+<br>
+ int n, i=1, cont=1, aprov =0, continuar=1, resposta = 1; <br> // Declaração de variáveis n: número de alunos; i: variável de controle do for;<br> cont, continuar, resposta: variável de controles dos whiles; aprov: número de alunos aprovados.<br>                                                                                                
+ float notas[50], valor, media, maior, menor; <br> // Declaração de variáveis para armazenar as notas, valor mínimo, média, maior e menor nota  <br>            
+ char resp[10]; // Variável para armazenar a resposta do usuário<br>
+<br>
+ printf("\n\n=======================================================\n"); // Divisão para organização<br>
+ printf("Bem-vindo ao sistema de notas!\n\n");                            // Apresentação do programa<br>
+ printf("Este programa irá: \n\n- Calcular a média da turma \n- Encontrar a maior e menor nota \n- Contar quantos alunos foram aprovados.\n");<br>// Descrição do que o programa faz
+ printf("=======================================================\n\n");   // Divisão para organização<br>
+<br>
+ while(continuar) {                   // Loop while(continuar) para repetir o programa<br>
+<br>    
+ while(cont) {                        // Loop while(cont) para verificar a entrada do número de alunos<br>
+<br>
+    printf("Digite o número de alunos da turma (máx. 50): ");  // Solicita o número de alunos<br>                              
+<br>    
+    if (scanf("%d", &n) != 1) {  			     // Caso a entrada não seja um número inteiro<br>            
+        printf("\n\nErro! você digitou algo que não é número inteiro!\n\n"); // Mnsagem de erro<br>
+        while (getchar() != '\n');          // Limpa o que sobrou na entrada <br> 
+        continue;        // Volta para o início do loop while(cont)<br>
+    }<br>
+<br>
+    else if (n>50) {     // Caso o número de alunos seja maior que 50<br>
+        printf("O número máximo de alunos é 50.\n"); <br>// Mensagem de erro e volta para o início do loop while(cont)<br>
+    }<br>
+<br>
+    else if (n<=0) {     // Caso o número de alunos seja menor ou igual a 0<br>
+        printf("O número mínimo de alunos é 1.\n"); <br> // Mensagem de erro e volta para o início do loop while(cont)<br>
+    }<br> 
+<br>
+    else  break;  // Caso o número de alunos seja válido, sai do loop while(cont)<br>
+<br>    
+ }<br>
+<br>
+ while(cont) { // Loop while(cont) para verificar a entrada do valor mínimo de aprovação<br>
+<br>    
+ printf("Informe um valor mínimo de aprovação: "); // Solicita o valor mínimo de aprovação<br>
+    if (scanf("%f", &valor) != 1) {  			   // Caso a entrada não seja um número <br>        
+        printf("\n\nErro! você digitou algo que não é número!\n\n"); // Mensagem de erro<br>
+        while (getchar() != '\n');                       // Limpa o que sobrou na entrada<br>  
+        continue;                               // Volta para o início do loop while(cont)<br>
+    }<br>
+<br>
+    else if (valor <= 0 || valor > 10) {              // Caso a entrada seja <= 0 ou > 10<br>
+        printf("O valor deve ser entre 0.1 e 10.\n"); <br> // Mensagem de erro e volta para o início do loop while(cont)<br>
+ }<br>
+<br>    
+    else break;                // Caso o valor seja válido, sai do loop while(cont)<br>
+ }<br>
+ printf("\n=======================================================\n\n"); // Divisão para organização<br>
+<br>
+    lerNotas(n, notas);                                // Chama a função para ler as notas dos alunos<br>
+<br>
+ printf("\n=======================================================\n\n"); // Divisão para organização<br>
+ printf("Notas em ordem: \n\n");<br> 
+ <br>
+    organizarNotas(n, notas);             // Chama a função para organizar as notas em ordem crescente<br>
+<br>
+        for (i = 0; i < n; i++) {         // Loop para exibir as notas organizadas<br>
+            printf("%6.2f", notas[i]);    // Alinha os números com largura fixa de 6 e 2 casas decimais<br>
+<br>    
+            if ((i + 1) % 5 == 0 || i == n - 1) { // Organiza as notas para ter 5 notas por linha ou última nota<br>
+                printf("\n");                     // Após 5 notas ou a última, pula para a próxima linha <br>
+            }<br>
+             else {<br>
+                printf(" | ");                    // Caso não seja a última nota, imprime o separador<br>
+            }<br>
+        }<br>    
+    encontrarExtremos(n, notas, &maior, &menor);  // Chama a função para encontrar a maior e menor nota<br>
+ <br>
+ printf("\nMaior Nota: %.2f\n", maior);                  // Exibe a maior nota<br>
+ printf("Menor Nota: %.2f", menor);                      // Exibe a menor nota<br>
+<br>
+    media = calcularMedia(n, notas);                     // Chama a função para calcular a média das notas<br>
+<br>
+ printf("\nMédia da Turma : %.2f\n", media);             // Exibe a média da turma<br>
+<br>
+    aprov = contarAprovados(n, notas, valor);  // Chama a função para contar quantos alunos foram aprovados<br>
+<br>    
+ printf("Alunos Aprovados: %d", aprov);                            // Exibe o número de alunos aprovados<br>
+ printf("\n\n=======================================================");  // Divisão para organização<br>
+<br>
+ while(resposta) {     // Loop while(resposta) para verificar a resposta do usuário<br>
+<br>  
+    printf("\n\n\n");                                                // Divisão para organização<br>
+    printf("Você gostaria de fazer outra operação? (sim / não) \n"); // Pergunta ao usuário se deseja fazer outra operação<br>
+    scanf("%s", resp);                                               // Lê a resposta do usuário<br>
+<br>     
+        if (strcasecmp(resp, "não") == 0 || strcasecmp(resp, "n") == 0 || strcasecmp(resp, "nao") == 0 || strcmp(resp, "0") == 0) { <br>  // Caso a resposta seja não, encerra o programa  <br>   
+               printf("\nCerto! Até logo!");                         // Mensagem de despedida<br>      
+               resposta = 0;                                         // Termina o loop while(resposta)<br> 
+               continuar = 0;                                        // Termina o loop while(continuar)<br>          
+               printf("\n\n=======================================================\n");// Divisão para organização e fim do programa<br>
+        }<br>
+<br>    
+        else if (strcasecmp(resp, "s") == 0 || strcasecmp(resp, "sim") == 0 || strcmp(resp, "1") == 0) { <br> // Caso a resposta seja sim, reinicia o programa pelo while(continuar)<br>
+            printf("\nCerto! Vamos Lá! ");<br>   
+            printf("\n\n\n=======================================================\n\n\n\n"); // Divisão para organização <br>  
+            break;      // Encerra o loop while(resposta)<br>
+        }<br>
+<br>   
+        else {                                                              // Caso a resposta seja inválida<br>
+            printf("Resposta Inválida! Responda com: (sim/1) ou (não/0)!"); // Mensagem de erro e volta ao início do while(resposta)<br>
+        }<br>
+}<br>
+}<br>
+}<br>
+            </pre>
+            </div>
+            </div>
+        </div>
+    </section>
+    <script src="../js/index.js"></script>
+</body>
+</html>
